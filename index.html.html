@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مبادرات تطويرية - جدول تفاعلي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .sync-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #27ae60;
+            color: white;
+        }
+        
+        .toolbar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 18px 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e8f4f8;
+            vertical-align: top;
+            position: relative;
+        }
+        
+        .project-cell {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+            min-width: 200px;
+        }
+        
+        .task-cell {
+            background: #f8f9fa;
+            border-right: 4px solid #74b9ff;
+        }
+        
+        .responsible-cell {
+            background: #fff3e0;
+            border-right: 4px solid #ff9800;
+            text-align: center;
+        }
+        
+        .timeline-cell {
+            background: #f3e5f5;
+            border-right: 4px solid #9c27b0;
+            text-align: center;
+        }
+        
+        .status-cell {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .actions-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .status-not-started {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-in-progress {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .status-completed {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .priority {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .priority-high {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .priority-medium {
+            background: #ffe0b2;
+            color: #ef6c00;
+        }
+        
+        .priority-low {
+            background: #dcedc8;
+            color: #558b2f;
+        }
+        
+        .editable {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 5px;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        .editable:focus {
+            background: #fff;
+            border: 2px solid #007bff;
+            outline: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .close {
+            color: white;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="sync-status">🌐 متزامن مع السحابة</div>
+            <h1>📋 مبادرات تطويرية - جدول تفاعلي</h1>
+            <p>جدول قابل للتعديل والإضافة والحذف لإدارة المشاريع التطويرية - يعمل من أي مكان!</p>
+        </div>
+        
+        <div class="toolbar">
+            <button class="btn btn-success" onclick="openAddProjectModal()">➕ إضافة مشروع جديد</button>
+            <button class="btn btn-warning" onclick="exportData()">📤 تصدير البيانات</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData()">
+            <button class="btn btn-primary" onclick="document.getElementById('importFile').click()">📥 استيراد البيانات</button>
+        </div>
+        
+        <div class="table-container">
+            <table id="projectTable">
+                <thead>
+                    <tr>
+                        <th style="width: 20%">المشروع</th>
+                        <th style="width: 35%">المهام التفصيلية</th>
+                        <th style="width: 15%">المسؤول</th>
+                        <th style="width: 12%">الجدول الزمني</th>
+                        <th style="width: 10%">الحالة</th>
+                        <th style="width: 8%">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- البيانات ستضاف هنا ديناميكياً -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p id="statsFooter">📅 آخر تحديث: <span id="lastUpdate"></span> | 📊 إجمالي المهام: <span id="totalTasks">0</span> | ✅ المكتملة: <span id="completedTasks">0</span> | 🔄 قيد التنفيذ: <span id="inProgressTasks">0</span> | ⏳ غير مبدوءة: <span id="notStartedTasks">0</span></p>
+        </div>
+    </div>
+
+    <!-- Modal إضافة مشروع -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modalTitle">إضافة مشروع جديد</h2>
+            </div>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label>اسم المشروع:</label>
+                    <input type="text" id="projectName" required>
+                </div>
+                <div class="form-group">
+                    <label>الأولوية:</label>
+                    <select id="projectPriority">
+                        <option value="high">عالية</option>
+                        <option value="medium">متوسطة</option>
+                        <option value="low">منخفضة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الرمز:</label>
+                    <input type="text" id="projectIcon" placeholder="📖">
+                </div>
+                <button type="submit" class="btn btn-success">حفظ المشروع</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal إضافة مهمة -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeTaskModal()">&times;</span>
+                <h2>إضافة مهمة جديدة</h2>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>وصف المهمة:</label>
+                    <textarea id="taskDescription" required rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>المسؤول:</label>
+                    <input type="text" id="taskResponsible" placeholder="غير محدد">
+                </div>
+                <div class="form-group">
+                    <label>الجدول الزمني:</label>
+                    <input type="text" id="taskTimeline" required>
+                </div>
+                <div class="form-group">
+                    <label>الحالة:</label>
+                    <select id="taskStatus">
+                        <option value="not-started">لم تبدأ</option>
+                        <option value="in-progress">قيد التنفيذ</option>
+                        <option value="completed">مكتمل</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">حفظ المهمة</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPniJbnqVAO-fAP81jFEdpqNsAEBMG7vs",
+            authDomain: "my-projects-table.firebaseapp.com",
+            projectId: "my-projects-table",
+            storageBucket: "my-projects-table.firebasestorage.app",
+            messagingSenderId: "487424169848",
+            appId: "1:487424169848:web:7d63f270e699c91b2c9a8d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.db = db;
+        window.dbFunctions = { doc, setDoc, getDoc, onSnapshot };
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <script>
+        let projects = [];
+        let currentProjectId = null;
+        let nextProjectId = 1;
+        let nextTaskId = 1;
+
+        // انتظار تحميل Firebase
+        window.addEventListener('firebaseReady', async () => {
+            await loadData();
+            setupRealtimeSync();
+        });
+
+        async function saveData() {
+            try {
+                const docRef = window.dbFunctions.doc(window.db, 'projectData', 'main');
+                await window.dbFunctions.setDoc(docRef, {
+                    projects: projects,
+                    nextProjectId: nextProjectId,
+                    nextTaskId: nextTaskId,
+                    lastUpdate: new Date().toISOString()
+                });
+            } catch (error) {
+                console.error('خطأ في الحفظ:', error);
+            }
+        }
+
+        async function loadData() {
+            try {
+                const docRef = window.dbFunctions.doc(window.db, 'projectData', 'main');
+                const docSnap = await window.dbFunctions.getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    projects = data.projects || getDefaultData();
+                    nextProjectId = data.nextProjectId || 5;
+                    nextTaskId = data.nextTaskId || 16;
+                } else {
+                    projects = getDefaultData();
+                    await saveData();
+                }
+                renderTable();
+            } catch (error) {
+                console.error('خطأ في التحميل:', error);
+                projects = getDefaultData();
+                renderTable();
+            }
+        }
+
+        function setupRealtimeSync() {
+            const docRef = window.dbFunctions.doc(window.db, 'projectData', 'main');
+            window.dbFunctions.onSnapshot(docRef, (doc) => {
+                if (doc.exists()) {
+                    const data = doc.data();
+                    projects = data.projects || [];
+                    nextProjectId = data.nextProjectId || 1;
+                    nextTaskId = data.nextTaskId || 1;
+                    renderTable();
+                }
+            });
+        }
+
+        function getDefaultData() {
+            return [
+                {
+                    id: 1,
+                    name: "المجلة الإلكترونية",
+                    icon: "📖",
+                    priority: "high",
+                    tasks: [
+                        {id: 1, description: "📞 التواصل مع الكتّاب وتجميع المحتوى", responsible: "غير محدد", timeline: "أسبوعين", status: "in-progress"},
+                        {id: 2, description: "🎨 تصميم المجلة وتبويب مواضيعها", responsible: "غير محدد", timeline: "أسبوع", status: "completed"},
+                        {id: 3, description: "📝 اختيار المواضيع وترتيبها", responsible: "غير محدد", timeline: "3 أيام", status: "completed"},
+                        {id: 4, description: "✍️ التدقيق اللغوي والمراجعة", responsible: "غير محدد", timeline: "أسبوع", status: "not-started"},
+                        {id: 5, description: "🌐 نشر المجلة في الموقع", responsible: "غير محدد", timeline: "يومين", status: "not-started"}
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "برامج البودكاست",
+                    icon: "🎙️",
+                    priority: "medium",
+                    tasks: [
+                        {id: 6, description: "💡 اختيار الموضوع والضيوف", responsible: "غير محدد", timeline: "أسبوع", status: "in-progress"},
+                        {id: 7, description: "📅 التنسيق مع المحاضرين", responsible: "غير محدد", timeline: "3 أيام", status: "not-started"},
+                        {id: 8, description: "🎬 حجز وترتيب الأستوديو مع المخرج", responsible: "غير محدد", timeline: "يومين", status: "not-started"},
+                        {id: 9, description: "📻 الإذاعة والنشر", responsible: "غير محدد", timeline: "يوم واحد", status: "not-started"}
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "تطوير وسائل عرض المبرة",
+                    icon: "💼",
+                    priority: "high",
+                    tasks: [
+                        {id: 10, description: "🤝 التواصل الاجتماعي وبناء الشراكات", responsible: "غير محدد", timeline: "شهر", status: "in-progress"},
+                        {id: 11, description: "🏢 الشراكات التسويقية", responsible: "غير محدد", timeline: "3 أسابيع", status: "not-started"},
+                        {id: 12, description: "🔍 فريق لبحث آخر التطويرات الذكية", responsible: "غير محدد", timeline: "أسبوعين", status: "not-started"}
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "صناعة قاعدة بيانات للعملاء",
+                    icon: "📊",
+                    priority: "low",
+                    tasks: [
+                        {id: 13, description: "💾 تصميم برنامج (نموذج) لجمع البيانات", responsible: "غير محدد", timeline: "أسبوعين", status: "not-started"},
+                        {id: 14, description: "📋 تصنيف وترتيب البيانات وفرزها حسب الحاجة", responsible: "غير محدد", timeline: "أسبوع", status: "not-started"},
+                        {id: 15, description: "💾 الاحتفاظ بالبيانات وتطويرها", responsible: "غير محدد", timeline: "مستمر", status: "not-started"}
+                    ]
+                }
+            ];
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            projects.forEach(project => {
+                project.tasks.forEach((task, index) => {
+                    const row = document.createElement('tr');
+                    
+                    if (index === 0) {
+                        const projectCell = document.createElement('td');
+                        projectCell.rowSpan = project.tasks.length;
+                        projectCell.className = 'project-cell';
+                        projectCell.innerHTML = `
+                            ${project.icon}<br>${project.name}
+                            <span class="priority priority-${project.priority}">
+                                ${project.priority === 'high' ? 'أولوية عالية' : 
+                                  project.priority === 'medium' ? 'أولوية متوسطة' : 'أولوية منخفضة'}
+                            </span>
+                            <br><br>
+                            <button class="btn btn-sm btn-primary" onclick="addTask(${project.id})">➕ مهمة</button>
+                            <button class="btn btn-sm btn-warning" onclick="editProject(${project.id})">✏️</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.id})">🗑️</button>
+                        `;
+                        row.appendChild(projectCell);
+                    }
+
+                    const taskCell = document.createElement('td');
+                    taskCell.className = 'task-cell';
+                    taskCell.innerHTML = `<input type="text" class="editable" value="${task.description}" onchange="updateTask(${project.id}, ${task.id}, 'description', this.value)">`;
+                    row.appendChild(taskCell);
+
+                    const responsibleCell = document.createElement('td');
+                    responsibleCell.className = 'responsible-cell';
+                    responsibleCell.innerHTML = `<input type="text" class="editable" value="${task.responsible}" onchange="updateTask(${project.id}, ${task.id}, 'responsible', this.value)">`;
+                    row.appendChild(responsibleCell);
+
+                    const timelineCell = document.createElement('td');
+                    timelineCell.className = 'timeline-cell';
+                    timelineCell.innerHTML = `<input type="text" class="editable" value="${task.timeline}" onchange="updateTask(${project.id}, ${task.id}, 'timeline', this.value)">`;
+                    row.appendChild(timelineCell);
+
+                    const statusCell = document.createElement('td');
+                    statusCell.className = `status-cell status-${task.status}`;
+                    statusCell.innerHTML = `
+                        <select class="editable" onchange="updateTask(${project.id}, ${task.id}, 'status', this.value)">
+                            <option value="not-started" ${task.status === 'not-started' ? 'selected' : ''}>لم تبدأ</option>
+                            <option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>قيد التنفيذ</option>
+                            <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>مكتمل</option>
+                        </select>
+                    `;
+                    row.appendChild(statusCell);
+
+                    const actionsCell = document.createElement('td');
+                    actionsCell.className = 'actions-cell';
+                    actionsCell.innerHTML = `
+                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${project.id}, ${task.id})">🗑️</button>
+                    `;
+                    row.appendChild(actionsCell);
+
+                    tbody.appendChild(row);
+                });
+            });
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('ar-SA');
+            
+            let totalTasks = 0;
+            let completedTasks = 0;
+            let inProgressTasks = 0;
+            let notStartedTasks = 0;
+
+            projects.forEach(project => {
+                project.tasks.forEach(task => {
+                    totalTasks++;
+                    if (task.status === 'completed') completedTasks++;
+                    else if (task.status === 'in-progress') inProgressTasks++;
+                    else notStartedTasks++;
+                });
+            });
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('inProgressTasks').textContent = inProgressTasks;
+            document.getElementById('notStartedTasks').textContent = notStartedTasks;
+        }
+
+        function openAddProjectModal() {
+            currentProjectId = null;
+            document.getElementById('modalTitle').textContent = 'إضافة مشروع جديد';
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectPriority').value = 'medium';
+            document.getElementById('projectIcon').value = '';
+            document.getElementById('projectModal').style.display = 'block';
+        }
+
+        function editProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentProjectId = projectId;
+                document.getElementById('modalTitle').textContent = 'تعديل المشروع';
+                document.getElementById('projectName').value = project.name;
+                document.getElementById('projectPriority').value = project.priority;
+                document.getElementById('projectIcon').value = project.icon;
+                document.getElementById('projectModal').style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('projectModal').style.display = 'none';
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').style.display = 'none';
+        }
+
+        function addTask(projectId) {
+            currentProjectId = projectId;
+            document.getElementById('taskDescription').value = '';
+            document.getElementById('taskResponsible').value = 'غير محدد';
+            document.getElementById('taskTimeline').value = '';
+            document.getElementById('taskStatus').value = 'not-started';
+            document.getElementById('taskModal').style.display = 'block';
+        }
+
+        function deleteProject(projectId) {
+            if (confirm('هل أنت متأكد من حذف هذا المشروع وجميع مهامه؟')) {
+                projects = projects.filter(p => p.id !== projectId);
+                renderTable();
+                saveData();
+            }
+        }
+
+        function deleteTask(projectId, taskId) {
+            if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
+                const project = projects.find(p => p.id === projectId);
+                if (project) {
+                    project.tasks = project.tasks.filter(t => t.id !== taskId);
+                    renderTable();
+                    saveData();
+                }
+            }
+        }
+
+        function updateTask(projectId, taskId, field, value) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                const task = project.tasks.find(t => t.id === taskId);
+                if (task) {
+                    task[field] = value;
+                    renderTable();
+                    saveData();
+                }
+            }
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(projects, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'مبادرات_تطويرية.json';
+            link.click();
+        }
+
+        function importData() {
+            const file = document.getElementById('importFile').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        projects = JSON.parse(e.target.result);
+                        renderTable();
+                        saveData();
+                        alert('تم استيراد البيانات بنجاح!');
+                    } catch (error) {
+                        alert('خطأ في قراءة الملف!');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('projectName').value;
+            const priority = document.getElementById('projectPriority').value;
+            const icon = document.getElementById('projectIcon').value || '📋';
+
+            if (currentProjectId) {
+                const project = projects.find(p => p.id === currentProjectId);
+                if (project) {
+                    project.name = name;
+                    project.priority = priority;
+                    project.icon = icon;
+                }
+            } else {
+                projects.push({
+                    id: nextProjectId++,
+                    name: name,
+                    icon: icon,
+                    priority: priority,
+                    tasks: []
+                });
+            }
+
+            renderTable();
+            saveData();
+            closeModal();
+        });
+
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const description = document.getElementById('taskDescription').value;
+            const responsible = document.getElementById('taskResponsible').value || 'غير محدد';
+            const timeline = document.getElementById('taskTimeline').value;
+            const status = document.getElementById('taskStatus').value;
+
+            const project = projects.find(p => p.id === currentProjectId);
+            if (project) {
+                project.tasks.push({
+                    id: nextTaskId++,
+                    description: description,
+                    responsible: responsible,
+                    timeline: timeline,
+                    status: status
+                });
+            }
+
+            renderTable();
+            saveData();
+            closeTaskModal();
+        });
+
+        window.addEventListener('click', function(event) {
+            const projectModal = document.getElementById('projectModal');
+            const taskModal = document.getElementById('taskModal');
+            if (event.target === projectModal) {
+                projectModal.style.display = 'none';
+            }
+            if (event.target === taskModal) {
+                taskModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
