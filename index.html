@@ -3,31 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة إدارة المبادرات الأكاديمية | Academic Projects Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>منصة المبادرة والتطوير | Development Initiatives Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            /* ألوان مهنية ومريحة للعين */
+            --primary-blue: #2563eb;
+            --primary-blue-light: #3b82f6;
+            --primary-blue-dark: #1d4ed8;
             
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --backdrop-blur: backdrop-filter: blur(20px);
+            --secondary-gray: #374151;
+            --secondary-gray-light: #6b7280;
+            --secondary-gray-dark: #1f2937;
             
-            --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.15);
-            --shadow-medium: 0 15px 35px rgba(31, 38, 135, 0.2);
-            --shadow-heavy: 0 25px 50px rgba(31, 38, 135, 0.25);
+            --success-green: #059669;
+            --warning-orange: #d97706;
+            --danger-red: #dc2626;
             
-            --text-primary: #1a1a1a;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --background-secondary: #f1f5f9;
             
-            --border-radius: 16px;
-            --border-radius-large: 24px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-white: #ffffff;
+            
+            --border-light: #e2e8f0;
+            --border-medium: #cbd5e1;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            --transition: all 0.2s ease-in-out;
         }
 
         * {
@@ -37,295 +52,229 @@
         }
 
         body {
-            font-family: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-main);
             color: var(--text-primary);
-            font-weight: 400;
+            font-size: 16px;
             line-height: 1.6;
+            padding: 20px;
+            font-weight: 400;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* شاشة كلمة المرور الذكية */
+        /* شاشة كلمة المرور */
         .password-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            var(--backdrop-blur);
+            background-color: rgba(0, 0, 0, 0.75);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            opacity: 1;
-            transition: var(--transition);
         }
 
         .password-box {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
+            background-color: var(--background-card);
             padding: 40px;
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-heavy);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
             text-align: center;
             max-width: 90%;
-            width: 480px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .password-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: var(--transition);
-        }
-
-        .password-box:hover::before {
-            left: 100%;
+            width: 450px;
+            border: 1px solid var(--border-light);
         }
 
         .password-box h2 {
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         .password-box p {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
             margin-bottom: 30px;
-            font-weight: 300;
+            font-weight: 500;
         }
 
         .password-input {
             width: 100%;
             padding: 16px 20px;
-            border: 2px solid var(--glass-border);
-            border-radius: var(--border-radius);
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-md);
             font-size: 16px;
             margin-bottom: 20px;
             text-align: center;
             direction: ltr;
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            color: white;
+            background-color: var(--background-card);
+            color: var(--text-primary);
             transition: var(--transition);
             font-weight: 500;
         }
 
-        .password-input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
         .password-input:focus {
             outline: none;
-            border-color: rgba(255,255,255,0.5);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
-            transform: scale(1.02);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .password-btn {
             width: 100%;
             padding: 16px;
-            background: var(--success-gradient);
-            color: white;
+            background-color: var(--primary-blue);
+            color: var(--text-white);
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--radius-md);
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
 
         .password-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .password-btn:active {
-            transform: translateY(0);
+            background-color: var(--primary-blue-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         .password-error {
-            color: #ff6b6b;
+            color: var(--danger-red);
             margin-top: 15px;
             font-size: 14px;
-            font-weight: 500;
-            padding: 10px;
-            background: rgba(255, 107, 107, 0.1);
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(255, 107, 107, 0.2);
+            font-weight: 600;
+            padding: 12px;
+            background-color: #fef2f2;
+            border-radius: var(--radius-md);
+            border: 1px solid #fecaca;
         }
 
-        /* التصميم الرئيسي الذكي */
+        /* التصميم الرئيسي */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-heavy);
+            background-color: var(--background-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
-            position: relative;
+            border: 1px solid var(--border-light);
         }
 
         .header {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: var(--text-white);
             text-align: center;
             padding: 30px 20px;
             position: relative;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--primary-gradient);
-            opacity: 0.8;
-            z-index: -1;
         }
 
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 8px;
-            letter-spacing: -1px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .header .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            font-weight: 300;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.95;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .logout-corner {
             position: absolute;
             top: 15px;
             left: 15px;
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            color: white;
-            border: 1px solid var(--glass-border);
-            padding: 10px 15px;
-            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 16px;
+            border-radius: var(--radius-lg);
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
             transition: var(--transition);
         }
 
         .logout-corner:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-light);
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
         }
 
-        /* أزرار التحكم الذكية */
+        /* أزرار التحكم */
         .controls {
             padding: 25px;
-            background: rgba(255,255,255,0.05);
+            background-color: var(--background-secondary);
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 50px;
+            border-radius: var(--radius-md);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             min-width: 140px;
-            position: relative;
-            overflow: hidden;
-            color: white;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: var(--transition);
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-primary { background: var(--primary-gradient); }
-        .btn-success { background: var(--success-gradient); }
-        .btn-warning { background: var(--warning-gradient); }
+        .btn-primary { 
+            background-color: var(--primary-blue);
+        }
+        .btn-primary:hover { 
+            background-color: var(--primary-blue-dark);
+        }
+
+        .btn-warning { 
+            background-color: var(--warning-orange);
+        }
+        .btn-warning:hover { 
+            background-color: #b45309;
+        }
+
+        .btn-success { 
+            background-color: var(--success-green);
+        }
+        .btn-success:hover { 
+            background-color: #047857;
+        }
 
         .sync-status {
-            background: var(--success-gradient);
-            color: white;
+            background-color: var(--success-green);
+            color: var(--text-white);
             padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 12px;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: var(--shadow-light);
-            animation: pulse 2s infinite;
+            box-shadow: var(--shadow-sm);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* الجدول الذكي والإبداعي */
+        /* الجدول */
         .table-container {
             padding: 25px;
-            background: rgba(255,255,255,0.02);
+            background-color: var(--background-card);
         }
 
         .table-header {
@@ -338,9 +287,9 @@
         }
 
         .table-title {
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -348,130 +297,105 @@
 
         .view-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
         .view-btn {
             padding: 8px 16px;
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            color: white;
+            background-color: var(--background-secondary);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .view-btn.active {
-            background: var(--success-gradient);
-            box-shadow: var(--shadow-light);
-        }
-
+        .view-btn.active,
         .view-btn:hover {
-            transform: translateY(-1px);
+            background-color: var(--primary-blue);
+            color: var(--text-white);
+            border-color: var(--primary-blue);
         }
 
         .table-wrapper {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
+            background-color: var(--background-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-medium);
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-scroll-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
+            min-width: 800px;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         th, td {
             padding: 16px 12px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
         }
 
         th {
-            background: rgba(255,255,255,0.08);
-            var(--backdrop-blur);
-            font-weight: 600;
-            color: white;
+            background-color: var(--background-secondary);
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 14px;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
             position: sticky;
             top: 0;
             z-index: 10;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
         .project-row {
             transition: var(--transition);
-            position: relative;
         }
 
         .project-row:hover {
-            background: rgba(255,255,255,0.05);
-            transform: scale(1.01);
-        }
-
-        .project-row::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--success-gradient);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .project-row:hover::before {
-            opacity: 1;
+            background-color: #f8fafc;
         }
 
         .project-row td {
-            color: rgba(255,255,255,0.9);
-            font-weight: 400;
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
-        /* بطاقات الحالة الذكية */
+        /* بطاقات الحالة */
         .status-badge {
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: var(--radius-lg);
+            font-size: 12px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-white);
         }
 
         .status-high { 
-            background: var(--danger-gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
+            background-color: var(--danger-red);
         }
         
         .status-medium { 
-            background: var(--warning-gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);
+            background-color: var(--warning-orange);
         }
         
         .status-low { 
-            background: var(--success-gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+            background-color: var(--success-green);
         }
 
-        /* بطاقات المهام الذكية */
+        /* المهام */
         .tasks-container {
             max-height: 120px;
             overflow-y: auto;
@@ -479,36 +403,18 @@
         }
 
         .task-item {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
+            background-color: var(--background-secondary);
             margin: 4px 0;
             padding: 8px 12px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--glass-border);
-            font-size: 11px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
             text-align: right;
-            color: rgba(255,255,255,0.9);
-            transition: var(--transition);
-            position: relative;
+            color: var(--text-primary);
+            border-left: 3px solid var(--primary-blue);
+            font-weight: 500;
         }
 
-        .task-item:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(-3px);
-        }
-
-        .task-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--success-gradient);
-            border-radius: 0 3px 3px 0;
-        }
-
-        /* أزرار الإجراءات الذكية */
+        /* أزرار الإجراءات */
         .actions-container {
             display: flex;
             gap: 6px;
@@ -519,44 +425,42 @@
         .action-btn {
             padding: 8px 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            color: white;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: var(--transition);
-        }
-
-        .action-btn:hover::before {
-            width: 100px;
-            height: 100px;
+            color: var(--text-white);
+            min-width: 35px;
         }
 
         .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
         }
 
-        .btn-edit { background: var(--warning-gradient); }
-        .btn-delete { background: var(--danger-gradient); }
-        .btn-add { background: var(--success-gradient); }
+        .btn-edit { 
+            background-color: var(--warning-orange);
+        }
+        .btn-edit:hover { 
+            background-color: #b45309;
+        }
 
-        /* نافذة التعديل الذكية */
+        .btn-delete { 
+            background-color: var(--danger-red);
+        }
+        .btn-delete:hover { 
+            background-color: #b91c1c;
+        }
+
+        .btn-add { 
+            background-color: var(--success-green);
+        }
+        .btn-add:hover { 
+            background-color: #047857;
+        }
+
+        /* نافذة التعديل */
         .modal {
             display: none;
             position: fixed;
@@ -565,35 +469,20 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
-            var(--backdrop-blur);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .modal.show {
-            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.75);
         }
 
         .modal-content {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
-            margin: 2% auto;
+            background-color: var(--background-card);
+            margin: 3% auto;
             padding: 30px;
-            border-radius: var(--border-radius-large);
+            border-radius: var(--radius-xl);
             width: 90%;
             max-width: 600px;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-heavy);
-            position: relative;
-            transform: scale(0.9);
-            transition: var(--transition);
-        }
-
-        .modal.show .modal-content {
-            transform: scale(1);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
         }
 
         .modal-header {
@@ -602,13 +491,13 @@
             align-items: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 2px solid var(--border-light);
         }
 
         .modal-title {
-            color: white;
+            color: var(--text-primary);
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -617,17 +506,17 @@
         .close-btn {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.7);
-            font-size: 24px;
+            color: var(--text-secondary);
+            font-size: 28px;
             cursor: pointer;
-            transition: var(--transition);
             padding: 5px;
-            border-radius: 50%;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
         }
 
         .close-btn:hover {
-            color: white;
-            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            background-color: var(--background-secondary);
         }
 
         .form-grid {
@@ -648,8 +537,8 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: white;
+            font-weight: 700;
+            color: var(--text-primary);
             font-size: 14px;
         }
 
@@ -658,34 +547,27 @@
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid var(--glass-border);
-            border-radius: var(--border-radius);
-            font-size: 14px;
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            color: white;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            background-color: var(--background-card);
+            color: var(--text-primary);
             transition: var(--transition);
             font-family: inherit;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255,255,255,0.5);
+            font-weight: 500;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: rgba(255,255,255,0.5);
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
-            transform: scale(1.02);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .form-group textarea {
             min-height: 120px;
             resize: vertical;
-            font-family: inherit;
         }
 
         .modal-buttons {
@@ -694,41 +576,40 @@
             justify-content: flex-end;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
+            border-top: 2px solid var(--border-light);
         }
 
         .modal-btn {
             padding: 12px 30px;
             border: none;
-            border-radius: 50px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
 
         .modal-btn.save {
-            background: var(--success-gradient);
-            color: white;
+            background-color: var(--primary-blue);
+            color: var(--text-white);
+        }
+
+        .modal-btn.save:hover {
+            background-color: var(--primary-blue-dark);
         }
 
         .modal-btn.cancel {
-            background: var(--glass-bg);
-            var(--backdrop-blur);
-            border: 1px solid var(--glass-border);
-            color: white;
+            background-color: var(--secondary-gray);
+            color: var(--text-white);
         }
 
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
+        .modal-btn.cancel:hover {
+            background-color: var(--secondary-gray-dark);
         }
 
         .hidden { display: none; }
 
-        /* استجابة ذكية للهواتف */
+        /* استجابة للشاشات */
         @media (max-width: 1024px) {
             .table-header {
                 flex-direction: column;
@@ -743,19 +624,20 @@
         @media (max-width: 768px) {
             body {
                 padding: 10px;
+                font-size: 15px;
             }
             
             .header h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
             }
             
             .header .subtitle {
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
             
             .controls {
                 flex-direction: column;
-                gap: 10px;
+                gap: 12px;
             }
             
             .btn {
@@ -765,18 +647,15 @@
             
             .table-container {
                 padding: 15px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
             }
             
             table {
-                min-width: 800px;
-                font-size: 12px;
+                font-size: 13px;
             }
             
             th, td {
-                padding: 10px 8px;
-                font-size: 11px;
+                padding: 12px 8px;
+                font-size: 13px;
             }
             
             .mobile-hide {
@@ -789,8 +668,9 @@
             }
             
             .action-btn {
-                padding: 6px 8px;
-                font-size: 10px;
+                padding: 8px;
+                font-size: 12px;
+                width: 100%;
             }
             
             .modal-content {
@@ -820,17 +700,17 @@
             }
             
             .header h1 {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
             
             table {
                 min-width: 700px;
-                font-size: 11px;
+                font-size: 12px;
             }
             
             th, td {
-                padding: 8px 6px;
-                font-size: 10px;
+                padding: 10px 6px;
+                font-size: 12px;
             }
         }
 
@@ -841,23 +721,24 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            background-color: var(--background-secondary);
+            border-radius: var(--radius-sm);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--success-gradient);
-            border-radius: 10px;
+            background-color: var(--border-medium);
+            border-radius: var(--radius-sm);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-gradient);
+            background-color: var(--text-secondary);
         }
 
-        /* تأثيرات تحميل ذكية */
+        /* تأثيرات التحميل */
         .loading {
             position: relative;
             pointer-events: none;
+            opacity: 0.7;
         }
 
         .loading::after {
@@ -865,17 +746,53 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255,255,255,0.3);
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid var(--border-light);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: var(--primary-blue);
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* تحسينات إضافية للوضوح */
+        .table-scroll-hint {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px;
+            background-color: var(--background-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-light);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 60px 20px;
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            font-size: 14px;
         }
     </style>
 </head>
@@ -883,10 +800,10 @@
     <!-- شاشة كلمة المرور -->
     <div id="passwordOverlay" class="password-overlay">
         <div class="password-box">
-            <h2>🔐 بوابة الأكاديميين</h2>
-            <p>منصة إدارة المبادرات والمشاريع الأكاديمية</p>
+            <h2>🔐 تسجيل الدخول</h2>
+            <p>منصة المبادرة والتطوير</p>
             <input type="password" id="passwordInput" class="password-input" placeholder="كلمة المرور" onkeypress="checkEnter(event)">
-            <button onclick="checkPassword()" class="password-btn">دخول المنصة</button>
+            <button onclick="checkPassword()" class="password-btn">دخول</button>
             <div id="passwordError" class="password-error"></div>
         </div>
     </div>
@@ -896,19 +813,22 @@
         <div class="container">
             <div class="header">
                 <button onclick="logout()" class="logout-corner">🚪 خروج</button>
-                <h1>🎓 منصة إدارة المبادرات الأكاديمية</h1>
-                <p class="subtitle">نظام ذكي لإدارة المشاريع والمبادرات الأكاديمية والبحثية • مدعوم بالذكاء الاصطناعي</p>
+                <h1>📊 منصة المبادرة والتطوير</h1>
+                <p class="subtitle">نظام إدارة المشاريع والمبادرات التطويرية المتكامل</p>
             </div>
 
             <div class="controls">
                 <button onclick="addProject()" class="btn btn-primary">
-                    <span>✨ مبادرة جديدة</span>
+                    <span>➕</span>
+                    <span>إضافة مبادرة جديدة</span>
                 </button>
                 <button onclick="exportData()" class="btn btn-warning">
-                    <span>📊 تصدير التقارير</span>
+                    <span>📥</span>
+                    <span>تصدير البيانات</span>
                 </button>
                 <button onclick="importData()" class="btn btn-success">
-                    <span>📥 استيراد البيانات</span>
+                    <span>📤</span>
+                    <span>استيراد البيانات</span>
                 </button>
                 <div class="sync-status">
                     <span>🔄</span>
@@ -920,106 +840,112 @@
                 <div class="table-header">
                     <div class="table-title">
                         <span>📋</span>
-                        <span>لوحة تحكم المبادرات</span>
+                        <span>جدول المبادرات</span>
                     </div>
                     <div class="view-controls">
-                        <button class="view-btn active" onclick="switchView('card')">🎴 عرض البطاقات</button>
-                        <button class="view-btn" onclick="switchView('table')">📊 عرض الجدول</button>
+                        <button class="view-btn active" onclick="switchView('table')">📊 عرض الجدول</button>
+                        <button class="view-btn" onclick="switchView('card')">🃏 عرض البطاقات</button>
                         <button class="view-btn" onclick="switchView('compact')">📱 عرض مضغوط</button>
                     </div>
                 </div>
 
+                <div class="table-scroll-hint">
+                    📱 يمكنك التمرير يميناً ويساراً لعرض جميع الأعمدة
+                </div>
+
                 <div class="table-wrapper">
-                    <table id="projectsTable">
-                        <thead>
-                            <tr>
-                                <th>🎯 الإجراءات</th>
-                                <th>📊 الحالة</th>
-                                <th class="mobile-hide">⏰ الجدول الزمني</th>
-                                <th>👤 المسؤول</th>
-                                <th class="mobile-hide">✅ المهام التفصيلية</th>
-                                <th>🏷️ نوع المبادرة</th>
-                                <th>📝 اسم المبادرة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="projectsBody">
-                            <!-- البيانات ستظهر هنا -->
-                        </tbody>
-                    </table>
+                    <div class="table-scroll-container">
+                        <table id="projectsTable">
+                            <thead>
+                                <tr>
+                                    <th>الإجراءات</th>
+                                    <th>الحالة</th>
+                                    <th class="mobile-hide">الجدول الزمني</th>
+                                    <th>المسؤول</th>
+                                    <th class="mobile-hide">المهام التفصيلية</th>
+                                    <th>نوع المبادرة</th>
+                                    <th>اسم المبادرة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsBody">
+                                <!-- البيانات ستظهر هنا -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- نافذة التعديل الذكية -->
+    <!-- نافذة التعديل -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
                     <span>✏️</span>
-                    <span>تحرير المبادرة الأكاديمية</span>
+                    <span>تعديل المبادرة</span>
                 </div>
                 <button class="close-btn" onclick="closeEditModal()">&times;</button>
             </div>
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="editName">🏷️ اسم المبادرة:</label>
+                    <label for="editName">اسم المبادرة:</label>
                     <input type="text" id="editName" placeholder="أدخل اسم المبادرة" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="editType">🎯 نوع المبادرة:</label>
+                    <label for="editType">نوع المبادرة:</label>
                     <select id="editType">
-                        <option value="بحث أكاديمي">🔬 بحث أكاديمي</option>
-                        <option value="مشروع تطوير">💻 مشروع تطوير</option>
-                        <option value="دراسة ميدانية">📋 دراسة ميدانية</option>
-                        <option value="ورشة عمل">🛠️ ورشة عمل</option>
-                        <option value="مؤتمر علمي">🎓 مؤتمر علمي</option>
-                        <option value="منحة بحثية">💰 منحة بحثية</option>
-                        <option value="أخرى">📌 أخرى</option>
+                        <option value="تطبيق ويب">تطبيق ويب</option>
+                        <option value="تطبيق جوال">تطبيق جوال</option>
+                        <option value="موقع إلكتروني">موقع إلكتروني</option>
+                        <option value="نظام إداري">نظام إداري</option>
+                        <option value="مشروع بحثي">مشروع بحثي</option>
+                        <option value="ورشة عمل">ورشة عمل</option>
+                        <option value="أخرى">أخرى</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="editStatus">📊 حالة المبادرة:</label>
+                    <label for="editStatus">حالة المبادرة:</label>
                     <select id="editStatus">
-                        <option value="قيد التحضير">⚡ قيد التحضير</option>
-                        <option value="قيد التنفيذ">🚀 قيد التنفيذ</option>
-                        <option value="مكتملة">✅ مكتملة</option>
-                        <option value="متوقفة مؤقتاً">⏸️ متوقفة مؤقتاً</option>
-                        <option value="ملغية">❌ ملغية</option>
+                        <option value="قيد التنفيذ">قيد التنفيذ</option>
+                        <option value="مكتمل">مكتمل</option>
+                        <option value="متأخر">متأخر</option>
+                        <option value="معلق">معلق</option>
+                        <option value="ملغي">ملغي</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="editPriority">🎯 مستوى الأولوية:</label>
+                    <label for="editPriority">الأولوية:</label>
                     <select id="editPriority">
-                        <option value="عالي">🔴 عالي</option>
-                        <option value="متوسط">🟡 متوسط</option>
-                        <option value="منخفض">🟢 منخفض</option>
+                        <option value="عالية">عالية</option>
+                        <option value="متوسطة">متوسطة</option>
+                        <option value="منخفضة">منخفضة</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="editResponsible">👤 الباحث المسؤول:</label>
-                    <input type="text" id="editResponsible" placeholder="د. أحمد محمد">
+                    <label for="editResponsible">المسؤول:</label>
+                    <input type="text" id="editResponsible" placeholder="اسم المسؤول عن المبادرة">
                 </div>
 
                 <div class="form-group">
-                    <label for="editTimeline">⏰ الجدول الزمني:</label>
-                    <input type="text" id="editTimeline" placeholder="6 أشهر، يناير 2024 - يونيو 2024">
+                    <label for="editTimeline">الجدول الزمني:</label>
+                    <input type="text" id="editTimeline" placeholder="مثال: 3 أشهر، يناير 2024">
                 </div>
             </div>
 
             <div class="form-group full-width">
-                <label for="editTasks">✅ المهام والأنشطة التفصيلية:</label>
-                <textarea id="editTasks" placeholder="أدخل كل مهمة في سطر منفصل:&#10;• مراجعة الأدبيات والدراسات السابقة&#10;• تصميم أدوات البحث والاستبيانات&#10;• جمع البيانات من العينة المستهدفة&#10;• تحليل البيانات إحصائياً&#10;• كتابة التقرير النهائي ونشر النتائج"></textarea>
+                <label for="editTasks">المهام التفصيلية (كل مهمة في سطر منفصل):</label>
+                <textarea id="editTasks" placeholder="اكتب كل مهمة في سطر منفصل&#10;مثال:&#10;تصميم واجهة المستخدم&#10;برمجة النظام&#10;اختبار التطبيق"></textarea>
             </div>
 
             <div class="modal-buttons">
-                <button type="button" class="modal-btn cancel" onclick="closeEditModal()">❌ إلغاء</button>
-                <button type="button" class="modal-btn save" onclick="saveEdit()">💾 حفظ التحديثات</button>
+                <button type="button" class="modal-btn cancel" onclick="closeEditModal()">إلغاء</button>
+                <button type="button" class="modal-btn save" onclick="saveEdit()">حفظ التعديلات</button>
             </div>
         </div>
     </div>
@@ -1068,7 +994,7 @@
                 localStorage.setItem('isLoggedIn', 'true');
                 showMainContent();
             } else {
-                errorEl.textContent = '❌ كلمة المرور غير صحيحة';
+                errorEl.textContent = 'كلمة المرور غير صحيحة';
                 document.getElementById('passwordInput').value = '';
                 setTimeout(() => {
                     errorEl.textContent = '';
@@ -1087,7 +1013,7 @@
             document.getElementById('mainContent').classList.remove('hidden');
             setTimeout(() => {
                 loadProjects();
-            }, 500);
+            }, 300);
         }
 
         window.logout = function() {
@@ -1106,42 +1032,41 @@
 
         // دوال إدارة المشاريع
         window.addProject = async function() {
-            const name = prompt("🏷️ اسم المبادرة الأكاديمية:");
+            const name = prompt("اسم المبادرة:");
             if (!name) return;
 
-            const type = prompt("🎯 نوع المبادرة (بحث أكاديمي، مشروع تطوير، دراسة ميدانية):");
-            const status = prompt("📊 حالة المبادرة (قيد التحضير، قيد التنفيذ، مكتملة):");
-            const priority = prompt("🎯 مستوى الأولوية (عالي، متوسط، منخفض):");
-            const responsible = prompt("👤 الباحث المسؤول:");
-            const timeline = prompt("⏰ الجدول الزمني:");
-            const tasksText = prompt("✅ المهام والأنشطة (افصل بين المهام بفاصلة):");
+            const type = prompt("نوع المبادرة (تطبيق ويب، تطبيق جوال، موقع إلكتروني):");
+            const status = prompt("حالة المبادرة (قيد التنفيذ، مكتمل، متأخر):");
+            const priority = prompt("الأولوية (عالية، متوسطة، منخفضة):");
+            const responsible = prompt("المسؤول:");
+            const timeline = prompt("الجدول الزمني:");
+            const tasksText = prompt("المهام التفصيلية (افصل بين المهام بفاصلة):");
 
             const tasks = tasksText ? tasksText.split(',').map(task => task.trim()).filter(task => task !== '') : [];
 
             const project = {
                 name: name,
-                type: type || "بحث أكاديمي",
-                status: status || "قيد التحضير",
-                priority: priority || "متوسط",
+                type: type || "تطبيق ويب",
+                status: status || "قيد التنفيذ",
+                priority: priority || "متوسطة",
                 responsible: responsible || "",
                 timeline: timeline || "",
                 tasks: tasks,
-                createdAt: new Date().toISOString(),
-                createdBy: "أكاديمي"
+                createdAt: new Date().toISOString()
             };
 
             try {
-                const btn = document.querySelector('.btn-primary');
+                const btn = event.target;
                 btn.classList.add('loading');
                 
                 await addDoc(collection(db, "projects"), project);
                 loadProjects();
                 
                 btn.classList.remove('loading');
-                showNotification("✅ تم إضافة المبادرة بنجاح!", "success");
+                showNotification("تم إضافة المبادرة بنجاح!", "success");
             } catch (error) {
                 console.error("خطأ في إضافة المبادرة:", error);
-                showNotification("❌ حدث خطأ في إضافة المبادرة", "error");
+                showNotification("حدث خطأ في إضافة المبادرة", "error");
             }
         }
 
@@ -1154,10 +1079,10 @@
                 if (querySnapshot.empty) {
                     projectsBody.innerHTML = `
                         <tr>
-                            <td colspan="7" style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">
-                                <div style="font-size: 48px; margin-bottom: 10px;">📋</div>
-                                <div style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">لا توجد مبادرات حالياً</div>
-                                <div style="font-size: 14px;">ابدأ بإضافة مبادرة أكاديمية جديدة</div>
+                            <td colspan="7" class="empty-state">
+                                <div class="icon">📋</div>
+                                <h3>لا توجد مبادرات حالياً</h3>
+                                <p>ابدأ بإضافة مبادرة جديدة من الأزرار أعلاه</p>
                             </td>
                         </tr>
                     `;
@@ -1170,7 +1095,7 @@
                 });
             } catch (error) {
                 console.error("خطأ في تحميل المبادرات:", error);
-                showNotification("❌ خطأ في تحميل البيانات", "error");
+                showNotification("خطأ في تحميل البيانات", "error");
             }
         }
 
@@ -1179,25 +1104,12 @@
             const row = document.createElement("tr");
             row.className = "project-row";
 
-            // عرض المهام بشكل ذكي
+            // عرض المهام
             const tasksHtml = project.tasks && project.tasks.length > 0 
                 ? `<div class="tasks-container">
                      ${project.tasks.map(task => `<div class="task-item">${task}</div>`).join('')}
                    </div>`
-                : '<div class="task-item" style="text-align: center; color: rgba(255,255,255,0.5);">لا توجد مهام محددة</div>';
-
-            // أيقونات ذكية للأنواع
-            const typeIcons = {
-                'بحث أكاديمي': '🔬',
-                'مشروع تطوير': '💻',
-                'دراسة ميدانية': '📋',
-                'ورشة عمل': '🛠️',
-                'مؤتمر علمي': '🎓',
-                'منحة بحثية': '💰',
-                'أخرى': '📌'
-            };
-
-            const typeIcon = typeIcons[project.type] || '📌';
+                : '<div class="task-item" style="text-align: center; opacity: 0.6;">لا توجد مهام محددة</div>';
 
             // فحص حجم الشاشة
             const isMobile = window.innerWidth <= 768;
@@ -1207,8 +1119,8 @@
             row.innerHTML = `
                 <td>
                     <div class="actions-container">
-                        <button onclick="deleteProject('${id}')" class="action-btn btn-delete" title="حذف المبادرة">🗑️</button>
-                        <button onclick="editProject('${id}')" class="action-btn btn-edit" title="تعديل المبادرة">✏️</button>
+                        <button onclick="deleteProject('${id}')" class="action-btn btn-delete" title="حذف">🗑️</button>
+                        <button onclick="editProject('${id}')" class="action-btn btn-edit" title="تعديل">✏️</button>
                         <button onclick="addTask('${id}')" class="action-btn btn-add" title="إضافة مهمة">➕</button>
                     </div>
                 </td>
@@ -1216,8 +1128,8 @@
                 ${timelineCol}
                 <td style="font-weight: 600;">${project.responsible || ''}</td>
                 ${tasksCol}
-                <td style="font-weight: 600;">${typeIcon} ${project.type || ''}</td>
-                <td style="font-weight: 700; color: white;">${project.name}</td>
+                <td style="font-weight: 600;">${project.type || ''}</td>
+                <td style="font-weight: 700;">${project.name}</td>
             `;
 
             projectsBody.appendChild(row);
@@ -1225,24 +1137,24 @@
 
         function getPriorityClass(status) {
             const statusMap = {
-                'متوقفة مؤقتاً': 'high',
-                'ملغية': 'high',
-                'قيد التحضير': 'medium',
-                'قيد التنفيذ': 'medium', 
-                'مكتملة': 'low'
+                'متأخر': 'high',
+                'معلق': 'high',
+                'ملغي': 'high',
+                'قيد التنفيذ': 'medium',
+                'مكتمل': 'low'
             };
             return statusMap[status] || 'medium';
         }
 
         window.deleteProject = async function(id) {
-            if (confirm("⚠️ هل أنت متأكد من حذف هذه المبادرة نهائياً؟\n\nهذا الإجراء لا يمكن التراجع عنه.")) {
+            if (confirm("هل أنت متأكد من حذف هذه المبادرة؟\n\nهذا الإجراء لا يمكن التراجع عنه.")) {
                 try {
                     await deleteDoc(doc(db, "projects", id));
                     loadProjects();
-                    showNotification("✅ تم حذف المبادرة بنجاح", "success");
+                    showNotification("تم حذف المبادرة بنجاح", "success");
                 } catch (error) {
                     console.error("خطأ في الحذف:", error);
-                    showNotification("❌ خطأ في حذف المبادرة", "error");
+                    showNotification("خطأ في حذف المبادرة", "error");
                 }
             }
         }
@@ -1267,15 +1179,11 @@
                     
                     window.currentEditId = id;
                     
-                    // إظهار النافذة بتأثير ذكي
-                    const modal = document.getElementById('editModal');
-                    modal.style.display = 'block';
-                    setTimeout(() => {
-                        modal.classList.add('show');
-                    }, 10);
+                    // إظهار النافذة
+                    document.getElementById('editModal').style.display = 'block';
                 }
             } catch (error) {
-                showNotification("❌ خطأ في تحميل بيانات المبادرة: " + error.message, "error");
+                showNotification("خطأ في تحميل بيانات المبادرة: " + error.message, "error");
             }
         }
 
@@ -1292,11 +1200,11 @@
                 const tasks = tasksText.split('\n').filter(task => task.trim() !== '');
 
                 if (!name.trim()) {
-                    showNotification("⚠️ يرجى إدخال اسم المبادرة", "warning");
+                    showNotification("يرجى إدخال اسم المبادرة", "error");
                     return;
                 }
 
-                const saveBtn = document.querySelector('.modal-btn.save');
+                const saveBtn = event.target;
                 saveBtn.classList.add('loading');
 
                 const projectRef = doc(db, "projects", window.currentEditId);
@@ -1314,24 +1222,20 @@
                 saveBtn.classList.remove('loading');
                 closeEditModal();
                 loadProjects();
-                showNotification("✅ تم تحديث المبادرة بنجاح!", "success");
+                showNotification("تم تحديث المبادرة بنجاح!", "success");
             } catch (error) {
-                showNotification("❌ خطأ في التحديث: " + error.message, "error");
+                showNotification("خطأ في التحديث: " + error.message, "error");
             }
         }
 
         // إغلاق نافذة التعديل
         window.closeEditModal = function() {
-            const modal = document.getElementById('editModal');
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+            document.getElementById('editModal').style.display = 'none';
         }
 
         // إضافة مهمة جديدة
         window.addTask = async function(projectId) {
-            const taskText = prompt("✅ اكتب المهمة أو النشاط الجديد:");
+            const taskText = prompt("اكتب المهمة الجديدة:");
             if (!taskText || !taskText.trim()) return;
 
             try {
@@ -1349,11 +1253,11 @@
                     });
                     
                     loadProjects();
-                    showNotification("✅ تم إضافة المهمة بنجاح", "success");
+                    showNotification("تم إضافة المهمة بنجاح", "success");
                 }
             } catch (error) {
                 console.error("خطأ في إضافة المهمة:", error);
-                showNotification("❌ حدث خطأ في إضافة المهمة", "error");
+                showNotification("حدث خطأ في إضافة المهمة", "error");
             }
         }
 
@@ -1367,31 +1271,33 @@
             });
             event.target.classList.add('active');
             
-            // تطبيق العرض (يمكن توسيعه لاحقاً)
             loadProjects();
         }
 
-        // نظام الإشعارات الذكي
+        // نظام الإشعارات
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
+            const colors = {
+                success: 'var(--success-green)',
+                error: 'var(--danger-red)',
+                warning: 'var(--warning-orange)',
+                info: 'var(--primary-blue)'
+            };
+            
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: ${type === 'success' ? 'var(--success-gradient)' : 
-                             type === 'error' ? 'var(--danger-gradient)' : 
-                             type === 'warning' ? 'var(--warning-gradient)' : 'var(--primary-gradient)'};
+                background-color: ${colors[type]};
                 color: white;
                 padding: 15px 20px;
-                border-radius: 12px;
-                box-shadow: var(--shadow-medium);
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
                 z-index: 10001;
                 font-weight: 600;
                 font-size: 14px;
-                max-width: 300px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255,255,255,0.2);
-                transform: translateX(350px);
+                max-width: 350px;
+                transform: translateX(400px);
                 transition: var(--transition);
             `;
             
@@ -1403,23 +1309,25 @@
             }, 10);
             
             setTimeout(() => {
-                notification.style.transform = 'translateX(350px)';
+                notification.style.transform = 'translateX(400px)';
                 setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 4000);
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 200);
+            }, 3000);
         }
 
-        // وظائف التصدير والاستيراد (قريباً)
+        // وظائف التصدير والاستيراد
         window.exportData = function() {
-            showNotification("📊 وظيفة تصدير التقارير قيد التطوير", "info");
+            showNotification("وظيفة التصدير ستتم إضافتها قريباً", "info");
         }
 
         window.importData = function() {
-            showNotification("📥 وظيفة استيراد البيانات قيد التطوير", "info");
+            showNotification("وظيفة الاستيراد ستتم إضافتها قريباً", "info");
         }
 
-        // تحديث تلقائي عند تغيير حجم الشاشة
+        // تحديث عند تغيير حجم الشاشة
         window.addEventListener('resize', function() {
             setTimeout(loadProjects, 100);
         });
@@ -1430,11 +1338,6 @@
             if (event.target === modal) {
                 closeEditModal();
             }
-        }
-
-        // تحميل أولي للبيانات
-        if (localStorage.getItem('isLoggedIn') === 'true') {
-            setTimeout(loadProjects, 1000);
         }
     </script>
 </body>
