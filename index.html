@@ -168,7 +168,7 @@
 
         table {
             width: 100%;
-            min-width: 800px; /* عرض أدنى للجدول */
+            min-width: 800px;
             border-collapse: collapse;
             background: white;
             font-size: 14px;
@@ -252,6 +252,80 @@
 
         .hidden { display: none; }
 
+        /* نافذة التعديل */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-btn.save {
+            background: #27ae60;
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background: #95a5a6;
+            color: white;
+        }
+
         /* تحسينات للهواتف */
         @media (max-width: 768px) {
             body {
@@ -296,7 +370,6 @@
                 margin: 1px;
             }
             
-            /* عرض أعمدة مختصرة للهواتف */
             .mobile-hide {
                 display: none;
             }
@@ -306,9 +379,14 @@
                 padding: 4px;
                 margin: 2px 0;
             }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 15px;
+                width: 95%;
+            }
         }
 
-        /* تحسينات للشاشات الصغيرة جداً */
         @media (max-width: 480px) {
             .password-box {
                 padding: 20px;
@@ -334,7 +412,6 @@
             }
         }
 
-        /* تمرير أفقي للجدول */
         .table-scroll-hint {
             text-align: center;
             color: #666;
@@ -345,7 +422,6 @@
             margin-bottom: 10px;
         }
 
-        /* تحسين التمرير */
         .table-container::-webkit-scrollbar {
             height: 8px;
         }
@@ -411,6 +487,68 @@
         </div>
     </div>
 
+    <!-- نافذة التعديل -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>✏️ تعديل المشروع</h3>
+            
+            <div class="form-group">
+                <label for="editName">اسم المشروع:</label>
+                <input type="text" id="editName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editType">نوع المشروع:</label>
+                <select id="editType">
+                    <option value="تطبيق ويب">تطبيق ويب</option>
+                    <option value="تطبيق جوال">تطبيق جوال</option>
+                    <option value="موقع إلكتروني">موقع إلكتروني</option>
+                    <option value="نظام إداري">نظام إداري</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editStatus">الحالة:</label>
+                <select id="editStatus">
+                    <option value="قيد التنفيذ">قيد التنفيذ</option>
+                    <option value="مكتمل">مكتمل</option>
+                    <option value="متأخر">متأخر</option>
+                    <option value="معلق">معلق</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editPriority">الأولوية:</label>
+                <select id="editPriority">
+                    <option value="عالي">عالي</option>
+                    <option value="متوسط">متوسط</option>
+                    <option value="منخفض">منخفض</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editResponsible">المسؤول:</label>
+                <input type="text" id="editResponsible">
+            </div>
+
+            <div class="form-group">
+                <label for="editTimeline">الجدول الزمني:</label>
+                <input type="text" id="editTimeline" placeholder="مثال: 3 أشهر، يناير 2024">
+            </div>
+
+            <div class="form-group">
+                <label for="editTasks">المهام التفصيلية (كل مهمة في سطر منفصل):</label>
+                <textarea id="editTasks" placeholder="اكتب كل مهمة في سطر منفصل&#10;مثال:&#10;تصميم واجهة المستخدم&#10;برمجة النظام&#10;اختبار التطبيق"></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn cancel" onclick="closeEditModal()">إلغاء</button>
+                <button type="button" class="modal-btn save" onclick="saveEdit()">حفظ التعديلات</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { 
@@ -421,13 +559,14 @@
             doc, 
             updateDoc, 
             deleteDoc,
+            getDoc,
             onSnapshot 
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyD3GIvJtpxRfYw5dKaKQdMHpMGR79FIu00",
-           authDomain: "my--projects-table.firebaseapp.com",
-           projectId: "my--projects-table",
+            authDomain: "my--projects-table.firebaseapp.com",
+            projectId: "my--projects-table",
             storageBucket: "my--projects-table.firebasestorage.app",
             messagingSenderId: "658439137840",
             appId: "1:658439137840:web:5523cfb1abd99f887e5bf5"
@@ -435,6 +574,12 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // متغير عام لحفظ Firebase
+        window.db = db;
+        window.doc = doc;
+        window.updateDoc = updateDoc;
+        window.getDoc = getDoc;
 
         // كلمة المرور
         const SITE_PASSWORD = "123456";
@@ -479,26 +624,35 @@
             }
         });
 
-        // باقي دوال المشاريع
+        // إضافة مشروع جديد
         window.addProject = async function() {
             const name = prompt("اسم المشروع:");
             if (!name) return;
 
+            const type = prompt("نوع المشروع (تطبيق ويب، تطبيق جوال، موقع إلكتروني):");
             const status = prompt("الحالة (قيد التنفيذ، مكتمل، متأخر):");
+            const priority = prompt("الأولوية (عالي، متوسط، منخفض):");
             const responsible = prompt("المسؤول:");
             const timeline = prompt("الجدول الزمني:");
+            const tasksText = prompt("المهام التفصيلية (افصل بين المهام بفاصلة):");
+
+            const tasks = tasksText ? tasksText.split(',').map(task => task.trim()).filter(task => task !== '') : [];
 
             const project = {
                 name: name,
+                type: type || "تطبيق ويب",
                 status: status || "قيد التنفيذ",
+                priority: priority || "متوسط",
                 responsible: responsible || "",
                 timeline: timeline || "",
-                tasks: []
+                tasks: tasks,
+                createdAt: new Date().toISOString()
             };
 
             try {
                 await addDoc(collection(db, "projects"), project);
                 console.log("تم إضافة المشروع بنجاح");
+                loadProjects();
             } catch (error) {
                 console.error("خطأ في إضافة المشروع:", error);
                 alert("حدث خطأ في إضافة المشروع");
@@ -525,17 +679,14 @@
             const row = document.createElement("tr");
             row.className = "project-row";
 
-            const tasksHtml = project.tasks ? project.tasks.map(task => 
-                `<div class="task-item">
-                    <strong>${task.description}</strong><br>
-                    مسؤول: ${task.responsible}<br>
-                    حالة: ${task.status}
-                </div>`
-            ).join('') : '';
+            // عرض المهام
+            const tasksHtml = project.tasks && project.tasks.length > 0 
+                ? project.tasks.map(task => `<div class="task-item">${task}</div>`).join('')
+                : '<div class="task-item">لا توجد مهام</div>';
 
             // فحص حجم الشاشة لإخفاء أعمدة
             const isMobile = window.innerWidth <= 768;
-            const timelineCol = isMobile ? '' : `<td>${project.timeline}</td>`;
+            const timelineCol = isMobile ? '' : `<td>${project.timeline || ''}</td>`;
             const tasksCol = isMobile ? '' : `<td>${tasksHtml}</td>`;
 
             row.innerHTML = `
@@ -546,7 +697,7 @@
                 </td>
                 <td><span class="status-${getPriorityClass(project.status)}">${project.status}</span></td>
                 ${timelineCol}
-                <td>${project.responsible}</td>
+                <td>${project.responsible || ''}</td>
                 ${tasksCol}
                 <td><strong>${project.name}</strong></td>
             `;
@@ -559,6 +710,7 @@
                 case 'متأخر': return 'high';
                 case 'قيد التنفيذ': return 'medium';
                 case 'مكتمل': return 'low';
+                case 'معلق': return 'high';
                 default: return 'medium';
             }
         }
@@ -574,40 +726,101 @@
             }
         }
 
-        window.editProject = function(id) {
-            alert("وظيفة التعديل ستتم إضافتها قريباً");
+        // تعديل المشروع
+        window.editProject = async function(id) {
+            try {
+                const projectRef = doc(db, "projects", id);
+                const projectSnap = await getDoc(projectRef);
+                
+                if (projectSnap.exists()) {
+                    const data = projectSnap.data();
+                    
+                    // املأ النموذج بالبيانات الحالية
+                    document.getElementById('editName').value = data.name || '';
+                    document.getElementById('editType').value = data.type || '';
+                    document.getElementById('editStatus').value = data.status || '';
+                    document.getElementById('editPriority').value = data.priority || '';
+                    document.getElementById('editResponsible').value = data.responsible || '';
+                    document.getElementById('editTimeline').value = data.timeline || '';
+                    document.getElementById('editTasks').value = (data.tasks || []).join('\n');
+                    
+                    // احفظ الـ ID للاستخدام عند الحفظ
+                    window.currentEditId = id;
+                    
+                    // اظهر النموذج
+                    document.getElementById('editModal').style.display = 'block';
+                }
+            } catch (error) {
+                alert("خطأ في تحميل بيانات المشروع: " + error.message);
+            }
         }
 
+        // حفظ التعديلات
+        window.saveEdit = async function() {
+            try {
+                const name = document.getElementById('editName').value;
+                const type = document.getElementById('editType').value;
+                const status = document.getElementById('editStatus').value;
+                const priority = document.getElementById('editPriority').value;
+                const responsible = document.getElementById('editResponsible').value;
+                const timeline = document.getElementById('editTimeline').value;
+                const tasksText = document.getElementById('editTasks').value;
+                const tasks = tasksText.split('\n').filter(task => task.trim() !== '');
+
+                if (!name) {
+                    alert('يرجى إدخال اسم المشروع');
+                    return;
+                }
+
+                const projectRef = doc(db, "projects", window.currentEditId);
+                await updateDoc(projectRef, {
+                    name: name,
+                    type: type,
+                    status: status,
+                    priority: priority,
+                    responsible: responsible,
+                    timeline: timeline,
+                    tasks: tasks,
+                    updatedAt: new Date().toISOString()
+                });
+
+                document.getElementById('editModal').style.display = 'none';
+                loadProjects();
+                alert('تم تحديث المشروع بنجاح!');
+            } catch (error) {
+                alert('خطأ في التحديث: ' + error.message);
+            }
+        }
+
+        // إغلاق نافذة التعديل
+        window.closeEditModal = function() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // إضافة مهمة جديدة
         window.addTask = async function(projectId) {
-            const description = prompt("وصف المهمة:");
-            if (!description) return;
-
-            const responsible = prompt("المسؤول عن المهمة:");
-            const status = prompt("حالة المهمة (جديد، قيد التنفيذ، مكتمل):");
-
-            const task = {
-                id: Date.now(),
-                description: description,
-                responsible: responsible || "",
-                status: status || "جديد"
-            };
+            const taskText = prompt("اكتب المهمة الجديدة:");
+            if (!taskText) return;
 
             try {
                 const projectRef = doc(db, "projects", projectId);
-                const projectDoc = await getDocs(collection(db, "projects"));
-                let currentTasks = [];
+                const projectSnap = await getDoc(projectRef);
                 
-                projectDoc.forEach((document) => {
-                    if (document.id === projectId) {
-                        currentTasks = document.data().tasks || [];
-                    }
-                });
-                
-                currentTasks.push(task);
-                await updateDoc(doc(db, "projects", projectId), { tasks: currentTasks });
-                loadProjects();
+                if (projectSnap.exists()) {
+                    const data = projectSnap.data();
+                    const currentTasks = data.tasks || [];
+                    currentTasks.push(taskText.trim());
+                    
+                    await updateDoc(projectRef, {
+                        tasks: currentTasks,
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    loadProjects();
+                }
             } catch (error) {
                 console.error("خطأ في إضافة المهمة:", error);
+                alert("حدث خطأ في إضافة المهمة");
             }
         }
 
@@ -623,6 +836,14 @@
         window.addEventListener('resize', function() {
             loadProjects();
         });
+
+        // إغلاق النافذة عند الضغط خارجها
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
