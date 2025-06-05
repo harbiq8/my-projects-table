@@ -1110,9 +1110,8 @@
                 : '<div class="task-item" style="text-align: center; opacity: 0.6;">لا توجد مهام محددة</div>';
 
             // فحص حجم الشاشة
-            const isMobile = window.innerWidth <= 480;
-            const timelineCol = isMobile ? '' : `<td>${project.timeline || ''}</td>`;
-            const tasksCol = isMobile ? '' : `<td>${tasksHtml}</td>`;
+            const timelineCol = `<td>${project.timeline || ''}</td>`;
+            const tasksCol = `<td>${tasksHtml}</td>`;
 
             row.innerHTML = `
                 <td>
