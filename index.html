@@ -61,8 +61,8 @@
             font-weight: 400;
         }
 
-        /* شاشة كلمة المرور */
-        .password-overlay {
+        /* شاشة تسجيل الدخول */
+        .auth-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -75,7 +75,7 @@
             z-index: 10000;
         }
 
-        .password-box {
+        .auth-box {
             background-color: var(--background-card);
             padding: 40px;
             border-radius: var(--radius-xl);
@@ -86,42 +86,54 @@
             border: 1px solid var(--border-light);
         }
 
-        .password-box h2 {
+        .auth-box h2 {
             color: var(--text-primary);
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .password-box p {
+        .auth-box p {
             color: var(--text-secondary);
             font-size: 1rem;
             margin-bottom: 30px;
             font-weight: 500;
         }
 
-        .password-input {
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .auth-input {
             width: 100%;
             padding: 16px 20px;
             border: 2px solid var(--border-medium);
             border-radius: var(--radius-md);
             font-size: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-            direction: ltr;
+            margin-bottom: 5px;
             background-color: var(--background-card);
             color: var(--text-primary);
             transition: var(--transition);
             font-weight: 500;
+            text-align: right;
         }
 
-        .password-input:focus {
+        .auth-input:focus {
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .password-btn {
+        .auth-btn {
             width: 100%;
             padding: 16px;
             background-color: var(--primary-blue);
@@ -132,15 +144,34 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
+            margin-bottom: 15px;
         }
 
-        .password-btn:hover {
+        .auth-btn:hover {
             background-color: var(--primary-blue-dark);
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
 
-        .password-error {
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-link:hover {
+            color: var(--primary-blue-dark);
+        }
+
+        .auth-error {
             color: var(--danger-red);
             margin-top: 15px;
             font-size: 14px;
@@ -149,6 +180,17 @@
             background-color: #fef2f2;
             border-radius: var(--radius-md);
             border: 1px solid #fecaca;
+        }
+
+        .auth-success {
+            color: var(--success-green);
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px;
+            background-color: #f0fdf4;
+            border-radius: var(--radius-md);
+            border: 1px solid #bbf7d0;
         }
 
         /* التصميم الرئيسي */
@@ -182,6 +224,20 @@
             font-weight: 500;
             opacity: 0.95;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-info {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 16px;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-weight: 600;
+            direction: ltr;
         }
 
         .logout-corner {
@@ -526,20 +582,8 @@
             margin-bottom: 20px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
         .form-group.full-width {
             grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-size: 14px;
         }
 
         .form-group input,
@@ -658,8 +702,6 @@
                 font-size: 13px;
             }
             
-            
-            
             .actions-container {
                 flex-direction: column;
                 gap: 4px;
@@ -685,10 +727,8 @@
             .modal-buttons {
                 flex-direction: column;
             }
-        }
 
-        @media (max-width: 480px) {
-            .password-box {
+            .auth-box {
                 padding: 25px;
                 margin: 15px;
             }
@@ -709,6 +749,13 @@
             th, td {
                 padding: 10px 6px;
                 font-size: 12px;
+            }
+
+            .user-info, .logout-corner {
+                position: static;
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
             }
         }
 
@@ -795,14 +842,65 @@
     </style>
 </head>
 <body>
-    <!-- شاشة كلمة المرور -->
-    <div id="passwordOverlay" class="password-overlay">
-        <div class="password-box">
+    <!-- شاشة تسجيل الدخول -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-box">
             <h2>🔐 تسجيل الدخول</h2>
             <p>منصة المبادرة والتطوير</p>
-            <input type="password" id="passwordInput" class="password-input" placeholder="كلمة المرور" onkeypress="checkEnter(event)">
-            <button onclick="checkPassword()" class="password-btn">دخول</button>
-            <div id="passwordError" class="password-error"></div>
+            
+            <!-- نموذج تسجيل الدخول -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">البريد الإلكتروني:</label>
+                    <input type="email" id="loginEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">كلمة المرور:</label>
+                    <input type="password" id="loginPassword" class="auth-input" placeholder="أدخل كلمة المرور" required>
+                </div>
+                <button onclick="loginUser()" class="auth-btn" id="loginBtn">تسجيل الدخول</button>
+                <div style="margin: 15px 0;">
+                    <a onclick="showResetForm()" class="auth-link">نسيت كلمة المرور؟</a>
+                </div>
+                <div style="margin: 10px 0;">
+                    <a onclick="showRegisterForm()" class="auth-link">إنشاء حساب جديد</a>
+                </div>
+            </div>
+
+            <!-- نموذج إنشاء حساب -->
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label for="registerEmail">البريد الإلكتروني:</label>
+                    <input type="email" id="registerEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">كلمة المرور:</label>
+                    <input type="password" id="registerPassword" class="auth-input" placeholder="كلمة مرور قوية (8 أحرف على الأقل)" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">تأكيد كلمة المرور:</label>
+                    <input type="password" id="registerConfirmPassword" class="auth-input" placeholder="أعد كتابة كلمة المرور" required>
+                </div>
+                <button onclick="registerUser()" class="auth-btn" id="registerBtn">إنشاء حساب</button>
+                <div style="margin: 15px 0;">
+                    <a onclick="showLoginForm()" class="auth-link">لديك حساب؟ تسجيل دخول</a>
+                </div>
+            </div>
+
+            <!-- نموذج استعادة كلمة المرور -->
+            <div id="resetForm" class="hidden">
+                <div class="form-group">
+                    <label for="resetEmail">البريد الإلكتروني:</label>
+                    <input type="email" id="resetEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                <button onclick="resetPassword()" class="auth-btn" id="resetBtn">إرسال رابط الاستعادة</button>
+                <div style="margin: 15px 0;">
+                    <a onclick="showLoginForm()" class="auth-link">العودة لتسجيل الدخول</a>
+                </div>
+            </div>
+
+            <div id="authError" class="auth-error hidden"></div>
+            <div id="authSuccess" class="auth-success hidden"></div>
         </div>
     </div>
 
@@ -810,6 +908,9 @@
     <div id="mainContent" class="hidden">
         <div class="container">
             <div class="header">
+                <div class="user-info" id="userInfo">
+                    👤 مرحباً
+                </div>
                 <button onclick="logout()" class="logout-corner">🚪 خروج</button>
                 <h1>📊 منصة المبادرة والتطوير</h1>
                 <p class="subtitle">نظام إدارة المشاريع والمبادرات التطويرية المتكامل</p>
@@ -858,9 +959,9 @@
                                 <tr>
                                     <th>الإجراءات</th>
                                     <th>الحالة</th>
-                                    <th class="mobile-hide">الجدول الزمني</th>
+                                    <th>الجدول الزمني</th>
                                     <th>المسؤول</th>
-                                    <th class="mobile-hide">المهام التفصيلية</th>
+                                    <th>المهام التفصيلية</th>
                                     <th>نوع المبادرة</th>
                                     <th>اسم المبادرة</th>
                                 </tr>
@@ -961,6 +1062,14 @@
             getDoc,
             onSnapshot 
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            sendPasswordResetEmail,
+            onAuthStateChanged
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyD3GIvJtpxRfYw5dKaKQdMHpMGR79FIu00",
@@ -973,60 +1082,209 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
         // متغيرات عامة
         window.db = db;
+        window.auth = auth;
         window.doc = doc;
         window.updateDoc = updateDoc;
         window.getDoc = getDoc;
         window.currentView = 'table';
 
-        const SITE_PASSWORD = "123456";
-
-        // دوال كلمة المرور
-        window.checkPassword = function() {
-            const input = document.getElementById('passwordInput').value;
-            const errorEl = document.getElementById('passwordError');
-
-            if (input === SITE_PASSWORD) {
-                localStorage.setItem('isLoggedIn', 'true');
+        // مراقبة حالة المستخدم
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
                 showMainContent();
+                document.getElementById('userInfo').textContent = `👤 ${user.email}`;
             } else {
-                errorEl.textContent = 'كلمة المرور غير صحيحة';
-                document.getElementById('passwordInput').value = '';
-                setTimeout(() => {
-                    errorEl.textContent = '';
-                }, 3000);
+                showAuthOverlay();
+            }
+        });
+
+        // دوال تسجيل الدخول والتسجيل
+        window.loginUser = async function() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                showAuthError('يرجى ملء جميع الحقول');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'جاري تسجيل الدخول...';
+                
+                await signInWithEmailAndPassword(auth, email, password);
+                clearAuthForms();
+                showAuthSuccess('تم تسجيل الدخول بنجاح!');
+            } catch (error) {
+                console.error('خطأ في تسجيل الدخول:', error);
+                showAuthError(getAuthErrorMessage(error.code));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'تسجيل الدخول';
             }
         }
 
-        window.checkEnter = function(event) {
-            if (event.key === 'Enter') {
-                checkPassword();
+        window.registerUser = async function() {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const btn = document.getElementById('registerBtn');
+
+            if (!email || !password || !confirmPassword) {
+                showAuthError('يرجى ملء جميع الحقول');
+                return;
             }
+
+            if (password !== confirmPassword) {
+                showAuthError('كلمة المرور وتأكيدها غير متطابقتان');
+                return;
+            }
+
+            if (password.length < 8) {
+                showAuthError('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'جاري إنشاء الحساب...';
+                
+                await createUserWithEmailAndPassword(auth, email, password);
+                clearAuthForms();
+                showAuthSuccess('تم إنشاء الحساب بنجاح!');
+            } catch (error) {
+                console.error('خطأ في إنشاء الحساب:', error);
+                showAuthError(getAuthErrorMessage(error.code));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'إنشاء حساب';
+            }
+        }
+
+        window.resetPassword = async function() {
+            const email = document.getElementById('resetEmail').value;
+            const btn = document.getElementById('resetBtn');
+
+            if (!email) {
+                showAuthError('يرجى إدخال البريد الإلكتروني');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'جاري الإرسال...';
+                
+                await sendPasswordResetEmail(auth, email);
+                showAuthSuccess('تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني');
+                setTimeout(() => showLoginForm(), 3000);
+            } catch (error) {
+                console.error('خطأ في إرسال رابط الاستعادة:', error);
+                showAuthError(getAuthErrorMessage(error.code));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'إرسال رابط الاستعادة';
+            }
+        }
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                showNotification('تم تسجيل الخروج بنجاح', 'success');
+            } catch (error) {
+                console.error('خطأ في تسجيل الخروج:', error);
+                showNotification('حدث خطأ في تسجيل الخروج', 'error');
+            }
+        }
+
+        // دوال التنقل بين النماذج
+        window.showLoginForm = function() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('resetForm').classList.add('hidden');
+            clearAuthMessages();
+        }
+
+        window.showRegisterForm = function() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('resetForm').classList.add('hidden');
+            clearAuthMessages();
+        }
+
+        window.showResetForm = function() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('resetForm').classList.remove('hidden');
+            clearAuthMessages();
+        }
+
+        // دوال مساعدة للمصادقة
+        function showAuthOverlay() {
+            document.getElementById('authOverlay').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
         }
 
         function showMainContent() {
-            document.getElementById('passwordOverlay').classList.add('hidden');
+            document.getElementById('authOverlay').classList.add('hidden');
             document.getElementById('mainContent').classList.remove('hidden');
             setTimeout(() => {
                 loadProjects();
             }, 300);
         }
 
-        window.logout = function() {
-            localStorage.removeItem('isLoggedIn');
-            document.getElementById('passwordOverlay').classList.remove('hidden');
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').textContent = '';
+        function showAuthError(message) {
+            const errorEl = document.getElementById('authError');
+            const successEl = document.getElementById('authSuccess');
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+            successEl.classList.add('hidden');
         }
 
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                showMainContent();
+        function showAuthSuccess(message) {
+            const errorEl = document.getElementById('authError');
+            const successEl = document.getElementById('authSuccess');
+            successEl.textContent = message;
+            successEl.classList.remove('hidden');
+            errorEl.classList.add('hidden');
+        }
+
+        function clearAuthMessages() {
+            document.getElementById('authError').classList.add('hidden');
+            document.getElementById('authSuccess').classList.add('hidden');
+        }
+
+        function clearAuthForms() {
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+            document.getElementById('resetEmail').value = '';
+        }
+
+        function getAuthErrorMessage(errorCode) {
+            switch (errorCode) {
+                case 'auth/user-not-found':
+                    return 'لا يوجد حساب بهذا البريد الإلكتروني';
+                case 'auth/wrong-password':
+                    return 'كلمة المرور غير صحيحة';
+                case 'auth/email-already-in-use':
+                    return 'هذا البريد الإلكتروني مستخدم بالفعل';
+                case 'auth/weak-password':
+                    return 'كلمة المرور ضعيفة جداً';
+                case 'auth/invalid-email':
+                    return 'البريد الإلكتروني غير صحيح';
+                case 'auth/too-many-requests':
+                    return 'محاولات كثيرة، حاول مرة أخرى لاحقاً';
+                default:
+                    return 'حدث خطأ، حاول مرة أخرى';
             }
-        });
+        }
 
         // دوال إدارة المشاريع
         window.addProject = async function() {
@@ -1050,7 +1308,8 @@
                 responsible: responsible || "",
                 timeline: timeline || "",
                 tasks: tasks,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                createdBy: auth.currentUser.email
             };
 
             try {
@@ -1109,10 +1368,6 @@
                    </div>`
                 : '<div class="task-item" style="text-align: center; opacity: 0.6;">لا توجد مهام محددة</div>';
 
-            // فحص حجم الشاشة
-            const timelineCol = `<td>${project.timeline || ''}</td>`;
-            const tasksCol = `<td>${tasksHtml}</td>`;
-
             row.innerHTML = `
                 <td>
                     <div class="actions-container">
@@ -1122,9 +1377,9 @@
                     </div>
                 </td>
                 <td><span class="status-badge status-${getPriorityClass(project.status)}">${project.status}</span></td>
-                ${timelineCol}
+                <td>${project.timeline || ''}</td>
                 <td style="font-weight: 600;">${project.responsible || ''}</td>
-                ${tasksCol}
+                <td>${tasksHtml}</td>
                 <td style="font-weight: 600;">${project.type || ''}</td>
                 <td style="font-weight: 700;">${project.name}</td>
             `;
@@ -1213,7 +1468,8 @@
                     responsible: responsible,
                     timeline: timeline,
                     tasks: tasks,
-                    updatedAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: auth.currentUser.email
                 });
 
                 saveBtn.classList.remove('loading');
@@ -1246,7 +1502,8 @@
                     
                     await updateDoc(projectRef, {
                         tasks: currentTasks,
-                        updatedAt: new Date().toISOString()
+                        updatedAt: new Date().toISOString(),
+                        updatedBy: auth.currentUser.email
                     });
                     
                     loadProjects();
@@ -1336,6 +1593,21 @@
                 closeEditModal();
             }
         }
+
+        // تسجيل دخول بالضغط على Enter
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (!document.getElementById('authOverlay').classList.contains('hidden')) {
+                    if (!document.getElementById('loginForm').classList.contains('hidden')) {
+                        loginUser();
+                    } else if (!document.getElementById('registerForm').classList.contains('hidden')) {
+                        registerUser();
+                    } else if (!document.getElementById('resetForm').classList.contains('hidden')) {
+                        resetPassword();
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
