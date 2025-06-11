@@ -516,7 +516,7 @@
             background-color: #047857;
         }
 
-        /* نافذة التعديل */
+        /* النوافذ المنبثقة */
         .modal {
             display: none;
             position: fixed;
@@ -917,7 +917,7 @@
             </div>
 
             <div class="controls">
-                <button onclick="addProject()" class="btn btn-primary">
+                <button onclick="showAddProjectModal()" class="btn btn-primary">
                     <span>➕</span>
                     <span>إضافة مبادرة جديدة</span>
                 </button>
@@ -976,7 +976,80 @@
         </div>
     </div>
 
-    <!-- نافذة التعديل -->
+    <!-- نافذة إضافة مبادرة جديدة -->
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>➕</span>
+                    <span>إضافة مبادرة جديدة</span>
+                </div>
+                <button class="close-btn" onclick="closeAddProjectModal()">&times;</button>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="newProjectName">اسم المبادرة: *</label>
+                    <input type="text" id="newProjectName" placeholder="أدخل اسم المبادرة" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newProjectType">نوع المبادرة:</label>
+                    <select id="newProjectType">
+                        <option value="تطبيق ويب">تطبيق ويب</option>
+                        <option value="تطبيق جوال">تطبيق جوال</option>
+                        <option value="موقع إلكتروني">موقع إلكتروني</option>
+                        <option value="نظام إداري">نظام إداري</option>
+                        <option value="مشروع بحثي">مشروع بحثي</option>
+                        <option value="ورشة عمل">ورشة عمل</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="newProjectStatus">حالة المبادرة:</label>
+                    <select id="newProjectStatus">
+                        <option value="قيد التنفيذ">قيد التنفيذ</option>
+                        <option value="مكتمل">مكتمل</option>
+                        <option value="متأخر">متأخر</option>
+                        <option value="معلق">معلق</option>
+                        <option value="ملغي">ملغي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="newProjectPriority">الأولوية:</label>
+                    <select id="newProjectPriority">
+                        <option value="متوسطة">متوسطة</option>
+                        <option value="عالية">عالية</option>
+                        <option value="منخفضة">منخفضة</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="newProjectResponsible">المسؤول:</label>
+                    <input type="text" id="newProjectResponsible" placeholder="اسم المسؤول عن المبادرة">
+                </div>
+
+                <div class="form-group">
+                    <label for="newProjectTimeline">الجدول الزمني:</label>
+                    <input type="text" id="newProjectTimeline" placeholder="مثال: 3 أشهر، يناير 2024">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="newProjectTasks">المهام التفصيلية (كل مهمة في سطر منفصل):</label>
+                <textarea id="newProjectTasks" placeholder="اكتب كل مهمة في سطر منفصل&#10;مثال:&#10;تصميم واجهة المستخدم&#10;برمجة النظام&#10;اختبار التطبيق"></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn cancel" onclick="closeAddProjectModal()">إلغاء</button>
+                <button type="button" class="modal-btn save" onclick="addNewProject()">إضافة المبادرة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل المبادرة -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1055,7 +1128,8 @@
             getFirestore, 
             collection, 
             addDoc, 
-            getDocs, 
+            query,
+            orderBy,
             doc, 
             updateDoc, 
             deleteDoc,
@@ -1091,6 +1165,7 @@
         window.updateDoc = updateDoc;
         window.getDoc = getDoc;
         window.currentView = 'table';
+        window.unsubscribeProjects = null; // لإيقاف الاستماع عند تسجيل الخروج
 
         // مراقبة حالة المستخدم
         onAuthStateChanged(auth, (user) => {
@@ -1099,6 +1174,11 @@
                 document.getElementById('userInfo').textContent = `👤 ${user.email}`;
             } else {
                 showAuthOverlay();
+                // إيقاف الاستماع للتحديثات عند تسجيل الخروج
+                if (window.unsubscribeProjects) {
+                    window.unsubscribeProjects();
+                    window.unsubscribeProjects = null;
+                }
             }
         });
 
@@ -1287,39 +1367,62 @@
         }
 
         // دوال إدارة المشاريع
-        window.addProject = async function() {
-            const name = prompt("اسم المبادرة:");
-            if (!name) return;
+        
+        // عرض نافذة إضافة مشروع جديد
+        window.showAddProjectModal = function() {
+            document.getElementById('addProjectModal').style.display = 'block';
+            // مسح النموذج
+            document.getElementById('newProjectName').value = '';
+            document.getElementById('newProjectType').value = 'تطبيق ويب';
+            document.getElementById('newProjectStatus').value = 'قيد التنفيذ';
+            document.getElementById('newProjectPriority').value = 'متوسطة';
+            document.getElementById('newProjectResponsible').value = '';
+            document.getElementById('newProjectTimeline').value = '';
+            document.getElementById('newProjectTasks').value = '';
+        }
 
-            const type = prompt("نوع المبادرة (تطبيق ويب، تطبيق جوال، موقع إلكتروني):");
-            const status = prompt("حالة المبادرة (قيد التنفيذ، مكتمل، متأخر):");
-            const priority = prompt("الأولوية (عالية، متوسطة، منخفضة):");
-            const responsible = prompt("المسؤول:");
-            const timeline = prompt("الجدول الزمني:");
-            const tasksText = prompt("المهام التفصيلية (افصل بين المهام بفاصلة):");
+        // إغلاق نافذة إضافة مشروع
+        window.closeAddProjectModal = function() {
+            document.getElementById('addProjectModal').style.display = 'none';
+        }
 
-            const tasks = tasksText ? tasksText.split(',').map(task => task.trim()).filter(task => task !== '') : [];
+        // إضافة مشروع جديد
+        window.addNewProject = async function() {
+            const name = document.getElementById('newProjectName').value.trim();
+            const type = document.getElementById('newProjectType').value;
+            const status = document.getElementById('newProjectStatus').value;
+            const priority = document.getElementById('newProjectPriority').value;
+            const responsible = document.getElementById('newProjectResponsible').value.trim();
+            const timeline = document.getElementById('newProjectTimeline').value.trim();
+            const tasksText = document.getElementById('newProjectTasks').value.trim();
+
+            if (!name) {
+                showNotification("يرجى إدخال اسم المبادرة", "error");
+                return;
+            }
+
+            const tasks = tasksText ? tasksText.split('\n').map(task => task.trim()).filter(task => task !== '') : [];
 
             const project = {
                 name: name,
-                type: type || "تطبيق ويب",
-                status: status || "قيد التنفيذ",
-                priority: priority || "متوسطة",
-                responsible: responsible || "",
-                timeline: timeline || "",
+                type: type,
+                status: status,
+                priority: priority,
+                responsible: responsible,
+                timeline: timeline,
                 tasks: tasks,
                 createdAt: new Date().toISOString(),
                 createdBy: auth.currentUser.email
             };
 
             try {
-                const btn = event.target;
-                btn.classList.add('loading');
+                const saveBtn = event.target;
+                saveBtn.classList.add('loading');
                 
                 await addDoc(collection(db, "projects"), project);
-                loadProjects();
                 
-                btn.classList.remove('loading');
+                saveBtn.classList.remove('loading');
+                closeAddProjectModal();
                 showNotification("تم إضافة المبادرة بنجاح!", "success");
             } catch (error) {
                 console.error("خطأ في إضافة المبادرة:", error);
@@ -1327,11 +1430,18 @@
             }
         }
 
-        async function loadProjects() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "projects"));
-                const projectsBody = document.getElementById("projectsBody");
-                projectsBody.innerHTML = "";
+        // تحميل المشاريع مع التحديث الفوري
+        function loadProjects() {
+            // إيقاف الاستماع السابق إذا كان موجوداً
+            if (window.unsubscribeProjects) {
+                window.unsubscribeProjects();
+            }
+
+            const projectsBody = document.getElementById("projectsBody");
+            const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
+
+            window.unsubscribeProjects = onSnapshot(q, (querySnapshot) => {
+                projectsBody.innerHTML = ""; // مسح المحتوى الحالي
 
                 if (querySnapshot.empty) {
                     projectsBody.innerHTML = `
@@ -1350,10 +1460,10 @@
                     const project = doc.data();
                     displayProject(doc.id, project);
                 });
-            } catch (error) {
-                console.error("خطأ في تحميل المبادرات:", error);
+            }, (error) => {
+                console.error("خطأ في تحميل المبادرات (onSnapshot):", error);
                 showNotification("خطأ في تحميل البيانات", "error");
-            }
+            });
         }
 
         function displayProject(id, project) {
@@ -1402,7 +1512,6 @@
             if (confirm("هل أنت متأكد من حذف هذه المبادرة؟\n\nهذا الإجراء لا يمكن التراجع عنه.")) {
                 try {
                     await deleteDoc(doc(db, "projects", id));
-                    loadProjects();
                     showNotification("تم حذف المبادرة بنجاح", "success");
                 } catch (error) {
                     console.error("خطأ في الحذف:", error);
@@ -1474,7 +1583,6 @@
 
                 saveBtn.classList.remove('loading');
                 closeEditModal();
-                loadProjects();
                 showNotification("تم تحديث المبادرة بنجاح!", "success");
             } catch (error) {
                 showNotification("خطأ في التحديث: " + error.message, "error");
@@ -1506,7 +1614,6 @@
                         updatedBy: auth.currentUser.email
                     });
                     
-                    loadProjects();
                     showNotification("تم إضافة المهمة بنجاح", "success");
                 }
             } catch (error) {
@@ -1524,8 +1631,6 @@
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            loadProjects();
         }
 
         // نظام الإشعارات
@@ -1581,16 +1686,15 @@
             showNotification("وظيفة الاستيراد ستتم إضافتها قريباً", "info");
         }
 
-        // تحديث عند تغيير حجم الشاشة
-        window.addEventListener('resize', function() {
-            setTimeout(loadProjects, 100);
-        });
-
-        // إغلاق النافذة بالضغط خارجها
+        // إغلاق النوافذ بالضغط خارجها
         window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
+            const editModal = document.getElementById('editModal');
+            const addModal = document.getElementById('addProjectModal');
+            
+            if (event.target === editModal) {
                 closeEditModal();
+            } else if (event.target === addModal) {
+                closeAddProjectModal();
             }
         }
 
